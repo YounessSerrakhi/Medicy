@@ -57,3 +57,10 @@ Route::get('/providers', [App\Http\Controllers\pagesController::class, 'provider
 
 
 Route::resource('/medicine', App\Http\Controllers\medicinesController::class);
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
