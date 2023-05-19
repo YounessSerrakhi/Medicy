@@ -19,6 +19,14 @@ class medicinesController extends Controller
         return view("pages.medicine")->with('medicines',$medicines);
     }
 
+    public function search(Request $request)
+    {
+        $search = $request->search;
+        $medicines = Medicine::where('name', 'LIKE', '%' . $search . '%')->paginate(100); // Adjust the pagination limit as needed
+        return view("pages.medicine")->with('medicines', $medicines);
+    }
+    
+
     /**
      * Show the form for creating a new resource.
      *

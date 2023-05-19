@@ -46,6 +46,7 @@ Route::get('/stock/createStock/{id}', [App\Http\Controllers\stocksController::cl
 Route::get('/stock/outStock/{id}', [App\Http\Controllers\stocksController::class, 'outStock'])->name('stock.outStock');
 Route::POST('/stock/searchItems', [App\Http\Controllers\stocksController::class, 'searchItems'])->name('stock.searchItems');
 
+
 //Route::post('/search-items', 'stocksController@searchItems')->name('stock.searchItems');
 
 
@@ -55,8 +56,12 @@ Route::get('/providers', [App\Http\Controllers\pagesController::class, 'provider
 
 
 
+//medicine
+Route::get('/medicine', [App\Http\Controllers\medicinesController::class,'index']);
+Route::get('/medicine/search', [App\Http\Controllers\medicinesController::class,'search'])->name('search');
 
-Route::resource('/medicine', App\Http\Controllers\medicinesController::class);
+
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

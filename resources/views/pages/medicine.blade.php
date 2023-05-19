@@ -18,70 +18,66 @@
           <h1>Medicine List</h1>
         </div>
         <div class="col-3">
-          <form role="search">
+          <form role="search" method="GET" action="{{ route('search') }}">
             <div class="input-group">
-              <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+              <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="search">
+              <button class="btn btn-primary" type="submit">Search</button>
             </div>
           </form>
         </div>
+        
       </div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Form</th>
-            <th>Marketing Status</th>
-            <th>Approval Date</th>
-            <th>quantité</th>
-          </tr>
-        </thead>
-        <tbody>
+      <body>
+        <style>
+          /* Custom styles */
+          .table-heading {
+            background-color: #f8f9fa;
+          }
+          .table-heading th {
+            font-weight: bold;
+          }
+        </style>
+        <table class="table">
+          <thead class="table-heading">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Form</th>
+              <th>Marketing Status</th>
+              <th>Approval Date</th>
+              <th>Price</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
             @foreach ($medicines as $medicine)
-                
-            
-          <tr>
-            <td>{{$medicine->idMedicine}}</td>
-            <td>{{$medicine->name}}</td>
-            <td>{{$medicine->form}}</td>
-            <td>{{$medicine->marketingStatus}}</td>
-            <td>{{$medicine->approvalDate}}
-            <td>
-              <form method="GET" action="{{ route('demand.create', ['id' => $medicine->idMedicine]) }}">
+            <tr>
+              <td>{{$medicine->idMedicine}}</td>
+              <td>{{$medicine->name}}</td>
+              <td>{{$medicine->form}}</td>
+              <td>{{$medicine->marketingStatus}}</td>
+              <td>{{$medicine->approvalDate}}</td>
+              <td>{{$medicine->price}}MAD</td>
+              <td>
+                <form method="GET" action="{{ route('demand.create', ['id' => $medicine->idMedicine]) }}">
                   @csrf
-                  <div>
-                      <label for="quantity">Quantity:</label>
-                      <input type="number" id="quantity_{{$medicine->idMedicine}}" name="quantity" value="1" min="1">
-                      <button type="button" onclick="increment({{$medicine->idMedicine}})">+</button>
-                      <button type="button" onclick="decrement({{$medicine->idMedicine}})">-</button>
+                  <div class="input-group">
+                    <input type="number" id="quantity_{{$medicine->idMedicine}}" name="quantity" value="1" min="1" class="form-control">
+                    <button type="submit" class="btn btn-primary">Create Stock</button>
                   </div>
-                  <button type="submit">Create Stock</button>
-              </form>
-          </td>
-          
-          </tr>
-
-          @endforeach
-          <!-- Add more rows for additional medicines -->
-        </tbody>
-      </table>
+                </form>
+              </td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </body>
       <div class="pagination justify-content-center">
         {{ $medicines->links() }}
       </div>
     </div>
   </body>
 </html>
-
-<!-- this is script to increment and decrement les quantité-->
-<script>
-  function increment(id) {
-      document.getElementById('quantity_'+id).stepUp();
-  }
-
-  function decrement(id) {
-      document.getElementById('quantity_'+id).stepDown();
-  }
-</script>
 
 
 

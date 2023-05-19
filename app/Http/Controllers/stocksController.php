@@ -53,6 +53,8 @@ class stocksController extends Controller
             $stock->name = $medicines->name;
             $stock->marketingStatus = $medicines->marketingStatus;
             $stock->approvalDate = $medicines->approvalDate;
+            $stock->price = $medicines->price;
+            $stock->barcode = $medicines->barcode;
         }
         else{
             $stock = stock::find($inDemand->idMedicine);
@@ -98,11 +100,23 @@ class stocksController extends Controller
      */
     public function outStock(Request $request, $id)
     {
-        $stock = stock::find($id);
-    
+
+        //$stock = stock::find($id);
+        $stock = stock::where('barcode','$id')->first();
+
+        
+        /*if (!$stock) {
+            $stock = stock::where('barcode', '=', $id)->first();
+        }*/
+
+        if (!$stock) {
+            // Handle the case where the stock record is not found
+            return redirect()->route('stock.index')->with('error', 'Stock not found');
+        }
         $validatedData = $request->validate([
             'quantity' => 'required|numeric|min:1|max:'.$stock->quantity,
         ]);
+
         if($stock->quantity == $request->quantity ){
             $stock->inStock=false;
             $stock->save();
@@ -124,12 +138,14 @@ class stocksController extends Controller
         $quantity = $request->input('quantity');
 
         // Perform the search operation or retrieve the item data based on the barcode
-        $stock = stock::find($barcode);
-        // Assuming we have an item to return
+
+        
+        $stock = Stock::where('id','=',$barcode)->orWhere('barcode','=','6111248360130')->first();
         $item = [
             'number' => $stock->id,
             'name' => $stock->name,
             'quantity' => $quantity,
+            'price' => $stock->price,
         ];
 
         // Return the item as JSON response
