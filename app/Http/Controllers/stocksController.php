@@ -101,18 +101,7 @@ class stocksController extends Controller
     public function outStock(Request $request, $id)
     {
 
-        //$stock = stock::find($id);
-        $stock = stock::where('barcode','$id')->first();
-
-        
-        /*if (!$stock) {
-            $stock = stock::where('barcode', '=', $id)->first();
-        }*/
-
-        if (!$stock) {
-            // Handle the case where the stock record is not found
-            return redirect()->route('stock.index')->with('error', 'Stock not found');
-        }
+        $stock = stock::find($id);
         $validatedData = $request->validate([
             'quantity' => 'required|numeric|min:1|max:'.$stock->quantity,
         ]);
@@ -127,6 +116,28 @@ class stocksController extends Controller
     
         return redirect()->route('stock.index')->with('success', 'Stock updated successfully');
     }
+
+
+    public function deleteItems(Request $request)
+{
+    $items = $request->json()->all();
+
+    foreach ($items as $item) {
+        $id = $item['id'];
+        $quantity = $item['quantity'];
+        $stock = stock::find($id);
+
+        if($stock->quantity == $quantity){
+            $stock->inStock=false;
+            $stock->save();
+        }
+    
+        $stock->quantity -= $quantity;
+        $stock->save();
+    }
+
+    return response()->json(['message' => 'Items deleted successfully']);
+}
 
 
 

@@ -44,6 +44,7 @@ Route::get('/stock' ,  [App\Http\Controllers\stocksController::class, 'index'])-
 Route::get('/stock/addStock/{idDemand}', [App\Http\Controllers\stocksController::class, 'addStock'])->name('stock.addStock');
 Route::get('/stock/createStock/{id}', [App\Http\Controllers\stocksController::class, 'createStock'])->name('stock.createStock');
 Route::get('/stock/outStock/{id}', [App\Http\Controllers\stocksController::class, 'outStock'])->name('stock.outStock');
+Route::POST('/stock/deleteItems', [App\Http\Controllers\stocksController::class, 'deleteItems'])->name('stock.deleteItems');
 Route::POST('/stock/searchItems', [App\Http\Controllers\stocksController::class, 'searchItems'])->name('stock.searchItems');
 
 

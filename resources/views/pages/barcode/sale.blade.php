@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 
 <section class="vh-100" style="background-color: #eee;">
@@ -58,6 +59,7 @@
 
 <script>
   var result = 0;
+  var stockItems = [];
 
   // Retrieve the form element
   var searchForm = document.getElementById('searchForm');
@@ -76,23 +78,19 @@
   var inputField = document.getElementById('barcodeInput');
   inputField.focus();
   inputField.addEventListener("keydown", function(event) {
-  if (event.key === " ") {
-    event.preventDefault(); // Prevent the space character from being entered in the input field
-  //inputField.addEventListener("input", function(event) {
-  //var inputValue = event.target.value;
-  var inputValue = event.target.value;
-    var values = inputValue.split(',');
-    var barcode = values[0].trim(); // Remove spaces around the barcode
-    var quantity = values[1].trim(); // Remove spaces around the quantity
-    ajxRqst(barcode, quantity);
-  }
+    if (event.key === " ") {
+      event.preventDefault(); // Prevent the space character from being entered in the input field
+      var inputValue = event.target.value;
+      var values = inputValue.split(',');
+      var barcode = values[0].trim(); // Remove spaces around the barcode
+      var quantity = values[1].trim(); // Remove spaces around the quantity
+      ajxRqst(barcode, quantity);
+    }
   });
-
-  var xhr;
 
   function ajxRqst(barcode, quantity) {
     // Send the Ajax request
-    xhr = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
     xhr.open('POST', '{{ route('stock.searchItems') }}'); // Replace with your search route
 
     // Set the CSRF token in the request header
@@ -120,6 +118,9 @@
           result += parseFloat(item.price) * parseInt(item.quantity);
           tableBody.insertAdjacentHTML('beforeend', newRow);
           document.getElementById('totalAmount').textContent = result.toFixed(2);
+
+          // Add the item to the stockItems array
+          stockItems.push({ id: item.number, quantity: item.quantity });
         } else {
           console.error('Table body element not found');
         }
@@ -148,7 +149,15 @@
     if (event.target.matches('.deleteRowBtn')) {
       var row = event.target.closest('tr');
       if (row) {
-        result -= parseFloat(JSON.parse(xhr.responseText).item.price) * parseInt(JSON.parse(xhr.responseText).item.quantity);
+        var itemId = row.id;
+        var itemIndex = stockItems.findIndex(function(item) {
+          return item.id === itemId;
+        });
+        if (itemIndex !== -1) {
+          var item = stockItems[itemIndex];
+          result -= parseFloat(row.querySelector('td:nth-child(4)').textContent) * parseInt(item.quantity);
+          stockItems.splice(itemIndex, 1);
+        }
         row.remove();
         document.getElementById('totalAmount').textContent = result.toFixed(2);
       }
@@ -198,16 +207,40 @@
     invoiceWindow.document.close();
     invoiceWindow.print();
 
+    // Delete items from the stocks table
+    deleteStockItems(stockItems);
 
-    var tableBody = document.getElementById('itemsTable');
-    while (tableBody.firstChild) {
-      tableBody.removeChild(tableBody.firstChild);
-    }
-    
-
-
+    // Clear the items table and reset the variables
+    itemsTable.innerHTML = '';
+    result = 0;
+    stockItems = [];
+    document.getElementById('totalAmount').textContent = '';
 
   });
+
+  function deleteStockItems(items) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '{{ route('stock.deleteItems') }}'); // Replace with your delete route
+
+    // Set the CSRF token in the request header
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        console.log('Stock items deleted successfully');
+      } else {
+        console.error('Request failed. Status:', xhr.status);
+      }
+    };
+
+    xhr.onerror = function() {
+      console.error('Request failed. Network error');
+    };
+
+    xhr.send(JSON.stringify(items));
+  }
 </script>
 
 

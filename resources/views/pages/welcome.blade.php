@@ -1,6 +1,12 @@
 @extends('layouts.app')
 @section('content')
-	<h1>hello pharmacy</h1>
+
+
+<style>
+    .container {
+        margin-top: 50px; /* Adjust the margin-top value as needed */
+    }
+</style>
 	<div class="container">
 		<div class="row">
 			<div class="col-xl-6 col-md-6">
