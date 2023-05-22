@@ -39,9 +39,11 @@ class demandController extends Controller
         }
         else{
         $inDemand=new inDemand();
+        $medicine=medicine::find($idMedicine);
         $inDemand->idMedicine=$idMedicine;
         $inDemand->idProvider=$idProvider;
         $inDemand->quantity=$quantity;
+        $inDemand->barcode=$medicine->barcode;
         }
         $inDemand->save();
         return redirect()->route('demand.index');

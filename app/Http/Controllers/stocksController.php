@@ -118,8 +118,7 @@ class stocksController extends Controller
     }
 
 
-    public function deleteItems(Request $request)
-{
+    public function deleteItems(Request $request){
     $items = $request->json()->all();
 
     foreach ($items as $item) {
@@ -138,6 +137,38 @@ class stocksController extends Controller
 
     return response()->json(['message' => 'Items deleted successfully']);
 }
+public function addItems(Request $request){
+    $items = $request->json()->all();
+
+    foreach ($items as $item) {
+        $id = $item['id'];
+        $quantity = $item['quantity'];
+        $inDemand=inDemand::where('idMedicine',$id)->orWhere('barcode',$id)->first();
+        $medicines = medicine::find($inDemand->idMedicine);
+        $inDemand->delete();
+        if(!stock::find($inDemand->idMedicine)){
+            $stock = new stock();
+            $stock->id = $inDemand->idMedicine;
+            $stock->quantity = $inDemand->quantity; 
+            $stock->form = $medicines->form;
+            $stock->name = $medicines->name;
+            $stock->marketingStatus = $medicines->marketingStatus;
+            $stock->approvalDate = $medicines->approvalDate;
+            $stock->price = $medicines->price;
+            $stock->barcode = $medicines->barcode;
+        }
+        else{
+            $stock = stock::find($inDemand->idMedicine);
+            $stock->inStock='1';
+            $stock->quantity += $inDemand->quantity; 
+        }
+        
+        
+        $stock->save();
+    }
+
+    return response()->json(['message' => 'Items added successfully']);
+}
 
 
 
@@ -151,12 +182,12 @@ class stocksController extends Controller
         // Perform the search operation or retrieve the item data based on the barcode
 
         
-        $stock = Stock::where('id','=',$barcode)->orWhere('barcode','=','6111248360130')->first();
+        $medicine = medicine::where('idMedicine',$barcode)->orWhere('barcode',$barcode)->first();
         $item = [
-            'number' => $stock->id,
-            'name' => $stock->name,
+            'number' => $medicine->idMedicine,
+            'name' => $medicine->name,
             'quantity' => $quantity,
-            'price' => $stock->price,
+            'price' => $medicine->price,
         ];
 
         // Return the item as JSON response

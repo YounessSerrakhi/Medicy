@@ -220,7 +220,7 @@
 
   function deleteStockItems(items) {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '{{ route('stock.deleteItems') }}'); // Replace with your delete route
+    xhr.open('POST', '{{ route('stock.deleteItems') }}');
 
     // Set the CSRF token in the request header
     var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

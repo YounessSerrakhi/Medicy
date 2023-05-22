@@ -21,6 +21,10 @@ Route::get('/', function () {
 Route::get('/sale', function () {
     return view('pages.barcode.sale');
 });
+Route::get('/store', function () {
+    return view('pages.barcode.store');
+});
+
 
 
 
@@ -45,10 +49,10 @@ Route::get('/stock/addStock/{idDemand}', [App\Http\Controllers\stocksController:
 Route::get('/stock/createStock/{id}', [App\Http\Controllers\stocksController::class, 'createStock'])->name('stock.createStock');
 Route::get('/stock/outStock/{id}', [App\Http\Controllers\stocksController::class, 'outStock'])->name('stock.outStock');
 Route::POST('/stock/deleteItems', [App\Http\Controllers\stocksController::class, 'deleteItems'])->name('stock.deleteItems');
+Route::POST('/stock/addItems', [App\Http\Controllers\stocksController::class, 'addItems'])->name('stock.addItems');
 Route::POST('/stock/searchItems', [App\Http\Controllers\stocksController::class, 'searchItems'])->name('stock.searchItems');
 
 
-//Route::post('/search-items', 'stocksController@searchItems')->name('stock.searchItems');
 
 
 
@@ -60,6 +64,10 @@ Route::get('/providers', [App\Http\Controllers\pagesController::class, 'provider
 //medicine
 Route::get('/medicine', [App\Http\Controllers\medicinesController::class,'index']);
 Route::get('/medicine/search', [App\Http\Controllers\medicinesController::class,'search'])->name('search');
+
+
+//client_side
+Route::get('/medicines_view', [App\Http\Controllers\clientController::class,'index'])->name('medicines_view');
 
 
 
