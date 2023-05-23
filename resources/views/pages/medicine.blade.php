@@ -63,7 +63,7 @@
                   @csrf
                   <div class="input-group">
                     <input type="number" id="quantity_{{$medicine->idMedicine}}" name="quantity" value="1" min="1" class="form-control">
-                    <button type="submit" class="btn btn-primary">Create Stock</button>
+                    <button type="submit" class="btn btn-primary">demand it</button>
                   </div>
                 </form>
               </td>

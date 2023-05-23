@@ -175,16 +175,13 @@ public function addItems(Request $request){
 
     public function searchItems(Request $request)
     {
-        // Retrieve the barcode from the request
         $barcode = $request->input('barcode');
         $quantity = $request->input('quantity');
 
-        // Perform the search operation or retrieve the item data based on the barcode
 
-        
-        $medicine = medicine::where('idMedicine',$barcode)->orWhere('barcode',$barcode)->first();
+        $medicine = stock::where('id',$barcode)->orWhere('barcode',$barcode)->first();
         $item = [
-            'number' => $medicine->idMedicine,
+            'number' => $medicine->id,
             'name' => $medicine->name,
             'quantity' => $quantity,
             'price' => $medicine->price,

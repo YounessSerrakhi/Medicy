@@ -6,10 +6,13 @@
     <meta name="description" content="Start your development with JohnDoe landing page.">
     <meta name="author" content="Devcrud">
     <title>Medicy</title>
+    <link rel="icon" href={{ asset("./imgs/logo.png")}}>
+
     <!-- font icons -->
     <link rel="stylesheet" href="{{ asset("./css/themify-icons.css")}}">
     <!-- Bootstrap + JohnDoe main styles -->
     <link rel="stylesheet" href={{ asset("./css/client.css")}}>
+
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
     <a href="components.html" class="btn btn-primary btn-component" data-spy="affix" data-offset-top="600"><i class="ti-shift-left-alt"></i> Components</a>
@@ -40,8 +43,12 @@
                         <a href="#home" class="nav-link">Home</a>
                     </li>
                     <li class="nav-item">
+                        <a href="#medicines" class="nav-link">Medicines</a>
+                    </li>
+                    <li class="nav-item">
                         <a href="#promotions" class="nav-link">Promotions</a>
                     </li>
+                
                 </ul>
                 <ul class="navbar-nav brand">
                     <img src= "{{ asset("./imgs/logo.png")}}" alt="" class="brand-img">
@@ -51,12 +58,42 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a href="#medicines" class="nav-link">Medicines</a>
-                    </li>
                     <li class="nav-item last-item">
                         <a href="#contact" class="nav-link">Contact</a>
                     </li>
+                    <li>
+                    @guest
+                @if (Route::has('login'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    </li>
+                @endif
+
+                @if (Route::has('register'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                    </li>
+                @endif
+            @else
+            
+            <ul class="navbar-nav ml-auto">
+                <li>
+                    <a class="btn btn-outline-secondary " href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user fa-fw"></i>{{ Auth::user()->name }}
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                     document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                </li>
+                
+            </ul>
+            @endguest
+        </li>
                 </ul>
             </div>
         </div>
@@ -213,7 +250,21 @@
     <section class="section bg-dark py-5">
         <div class="container text-center">
             <h2 class="text-light mb-5 font-weight-normal">You don't find your medicine </h2>
-            <button class="btn bg-primary w-lg" >demand it</button>
+            <div class="btn-group">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   Demand it
+                </button>
+                <div class="dropdown-menu form">
+                   <form method="GET" action="{{ route('clientDemand')}}" class="px-4 py-3">
+                      <div class="form-group">
+                         <input name="medicine" type="text" class="form-control" id="exampleDropdownFormEmail1" placeholder="medicine name">
+                      </div>
+                      <div class="form-group">
+                         <input name="quantity" type="number" class="form-control" id="exampleDropdownFormPassword1" placeholder="quantity">
+                      </div>
+                      <button type="submit" class="btn btn-primary btn-block">Send demand</button>
+                   </form>
+             </div>   
         </div>
     </section>
     <!-- End of portfolio section -->
@@ -289,20 +340,18 @@
     </footer>
 
 	<!-- core  -->
-    <script src="assets/vendors/jquery/jquery-3.4.1.js"></script>
-    <script src="assets/vendors/bootstrap/bootstrap.bundle.js"></script>
+    <script src="./vendors/jquery/jquery-3.4.1.js"></script>
+    <script src="./vendors/bootstrap/bootstrap.bundle.js"></script>
 
     <!-- bootstrap 3 affix -->
-    <script src="assets/vendors/bootstrap/bootstrap.affix.js"></script>
+    <script src="./vendors/bootstrap/bootstrap.affix.js"></script>
 
     <!-- Isotope  -->
-    <script src="assets/vendors/isotope/isotope.pkgd.js"></script>
+    <script src="./vendors/isotope/isotope.pkgd.js"></script>
     
     <!-- Google mpas -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtme10pzgKSPeJVJrG1O3tjR6lk98o4w8&callback=initMap"></script>
 
-    <!-- JohnDoe js -->
-    <script src="{{ asset('./js/client.js') }}"></script>
 
 </body>
 </html>
