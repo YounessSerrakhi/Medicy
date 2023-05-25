@@ -91,7 +91,7 @@
   function ajxRqst(barcode, quantity) {
     // Send the Ajax request
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '{{ route('stock.searchItems') }}'); // Replace with your search route
+    xhr.open('POST', '{{ route('stock.searchStocksItems') }}'); // Replace with your search route
 
     // Set the CSRF token in the request header
     var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

@@ -54,6 +54,8 @@ Route::get('/demand/create/{id}', [App\Http\Controllers\demandController::class,
 Route::get('/demand/edit/{idDemand}', [App\Http\Controllers\demandController::class, 'edit'])->name('demand.edit');
 Route::get('/demand/save/{idDemand}', [App\Http\Controllers\demandController::class, 'save'])->name('demand.save');
 Route::get('/demand/destroy/{idDemand}', [App\Http\Controllers\demandController::class, 'destroy'])->name('demand.destroy');
+Route::POST('/demand/searchDemandeItems', [App\Http\Controllers\demandController::class, 'searchDemandeItems'])->name('inDemande.searchDemandeItems');
+
 
 //demand-client
 Route::get('/admin/clientDemande', [App\Http\Controllers\ClientDemandController::class, 'index'])->name('viewClientDemandes');
@@ -70,7 +72,7 @@ Route::get('/stock/createStock/{id}', [App\Http\Controllers\stocksController::cl
 Route::get('/stock/outStock/{id}', [App\Http\Controllers\stocksController::class, 'outStock'])->name('stock.outStock');
 Route::POST('/stock/deleteItems', [App\Http\Controllers\stocksController::class, 'deleteItems'])->name('stock.deleteItems');
 Route::POST('/stock/addItems', [App\Http\Controllers\stocksController::class, 'addItems'])->name('stock.addItems');
-Route::POST('/stock/searchItems', [App\Http\Controllers\stocksController::class, 'searchItems'])->name('stock.searchItems');
+Route::POST('/stock/searchStocksItems', [App\Http\Controllers\stocksController::class, 'searchStocksItems'])->name('stock.searchStocksItems');
 
 
 

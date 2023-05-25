@@ -173,7 +173,7 @@ public function addItems(Request $request){
 
 
 
-    public function searchItems(Request $request)
+    public function searchStocksItems(Request $request)
     {
         $barcode = $request->input('barcode');
         $quantity = $request->input('quantity');
