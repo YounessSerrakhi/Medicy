@@ -10,6 +10,32 @@ use App\Models\inDemand;
 
 class demandController extends Controller
 {
+
+    public function searchDemandeItems(Request $request)
+    {
+        $barcode = $request->input('barcode');
+        $quantity = $request->input('quantity');
+
+
+        $medicine = inDemand::where('inDemand.idMedicine', $barcode)
+        ->orWhere('inDemand.barcode', $barcode)
+        ->join('medicine', 'medicine.idMedicine', '=', 'inDemand.idMedicine')
+        ->select('inDemand.idMedicine AS number', 'medicine.name', 'medicine.price')
+        ->first();
+    
+    $item = [
+        'number' => $medicine->number,
+        'name' => $medicine->name,
+        'quantity' => $quantity,
+        'price' => $medicine->price,
+    ];
+    
+
+        // Return the item as JSON response
+        return response()->json(['item' => $item]);
+    }
+
+
     public function index()
 {
     $inDemands = inDemand::all();
@@ -39,9 +65,11 @@ class demandController extends Controller
         }
         else{
         $inDemand=new inDemand();
+        $medicine=medicine::find($idMedicine);
         $inDemand->idMedicine=$idMedicine;
         $inDemand->idProvider=$idProvider;
         $inDemand->quantity=$quantity;
+        $inDemand->barcode=$medicine->barcode;
         }
         $inDemand->save();
         return redirect()->route('demand.index');

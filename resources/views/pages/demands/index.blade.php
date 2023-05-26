@@ -16,6 +16,7 @@
 					<td>{{ $medicines[$inDemand->idMedicine]->name }}</td>
                 	<td>{{ $providers[$inDemand->idProvider]->name }}</td>
                 	<td>{{ $inDemand->quantity }}</td>
+					<td>{{ $inDemand->barcode }}</td>
 					<td>
 						<a href="{{ route('demand.show', ['idDemand' => $inDemand->idDemand]) }}" class="btn btn-sm btn-primary">Details</a>
 						<a href="{{ route('demand.edit', ['idDemand' => $inDemand->idDemand]) }}" class="btn btn-sm btn-primary">Edit</a>
@@ -27,7 +28,7 @@
 				@endforeach
 			</tbody>
 		</table>
-		<a id="add-btn" href="/lsapp/public/medicine" class="btn btn-primary">demande Medicines</a>
+		<a id="add-btn" href="/medicine" class="btn btn-primary">demande Medicines</a>
 	</div>
 
 	<!-- Modal for editing and adding items -->

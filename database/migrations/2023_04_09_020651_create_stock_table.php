@@ -14,14 +14,14 @@ class CreateStockTable extends Migration
     public function up()
     {
         Schema::create('stock', function (Blueprint $table) {
-            $table->Increments('id');
+            $table->string('id', 30)->primary();
             $table->string('name',200);
             $table->string('form',100);
             $table->string('marketingStatus',100);
             $table->date('approvalDate');
             $table->Integer('quantity');
+            $table->decimal('price', 10, 2);
             $table->Boolean('inStock')->default(true);
-            $table->foreign('id')->references('idMedicine')->on('medicine');
             $table->timestamps();
         });
     }
