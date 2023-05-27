@@ -24,6 +24,16 @@ class stocksController extends Controller
     
         return view("pages.stocks.stocks")->with(['stocks' => $stocks, 'outOfStocks' => $outOfStocks]);
     }
+
+    public function recentlyOut()
+    {
+        $outOfStocks = Stock::where('inStock', '=', '0')
+        ->whereRaw('DATEDIFF(CURDATE(), updated_at) <= 30')
+        ->get();
+    
+        return view("pages.stocks.recentlyOut")->with(['outOfStocks' => $outOfStocks]);
+    }
+    
     
 
     /**

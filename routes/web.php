@@ -67,6 +67,7 @@ Route::delete('/admin/clientDemande/destroy/{id}', [App\Http\Controllers\ClientD
 
 //stocks
 Route::get('/stock' ,  [App\Http\Controllers\stocksController::class, 'index'])->name('stock.index');
+Route::get('/recentlyOut' ,  [App\Http\Controllers\stocksController::class, 'recentlyOut'])->name('stock.recentlyOut');
 Route::get('/stock/addStock/{idDemand}', [App\Http\Controllers\stocksController::class, 'addStock'])->name('stock.addStock');
 Route::get('/stock/createStock/{id}', [App\Http\Controllers\stocksController::class, 'createStock'])->name('stock.createStock');
 Route::get('/stock/outStock/{id}', [App\Http\Controllers\stocksController::class, 'outStock'])->name('stock.outStock');

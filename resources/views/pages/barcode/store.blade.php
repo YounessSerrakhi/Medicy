@@ -143,7 +143,6 @@
         });
         if (itemIndex !== -1) {
           var item = stockItems[itemIndex];
-          result -= parseFloat(row.querySelector('td:nth-child(4)').textContent) * parseInt(item.quantity);
           stockItems.splice(itemIndex, 1);
         }
         row.remove();

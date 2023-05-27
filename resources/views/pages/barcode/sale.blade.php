@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="vh-100" style="background-color: #eee;">  
+
+<section class="vh-100" style="background-color: #eee;">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col col-lg-9 col-xl-7">
@@ -17,10 +18,12 @@
                   <label class="form-label" for="form1">Enter the barcode here</label>
                 </div>
               </div>
+
               <div class="col-12">
                 <button type="submit" class="btn btn-primary">Add</button>
               </div>
             </form>
+
             <table class="table mb-4">
               <thead>
                 <tr>
@@ -61,7 +64,7 @@
   // Retrieve the form element
   var searchForm = document.getElementById('searchForm');
 
-  // Handle the form submission by two event listner
+  // Handle the form submission
   searchForm.addEventListener('submit', function(event) {
     event.preventDefault();
     var barcodeInput = document.getElementById('barcodeInput');
@@ -74,7 +77,7 @@
 
   var inputField = document.getElementById('barcodeInput');
   inputField.focus();
-  inputField.addEventListener("keydown", function(event) 
+  inputField.addEventListener("keydown", function(event) {
     if (event.key === " ") {
       event.preventDefault(); // Prevent the space character from being entered in the input field
       var inputValue = event.target.value;
@@ -88,14 +91,14 @@
   function ajxRqst(barcode, quantity) {
     // Send the Ajax request
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '{{ route('stock.searchStocksItems') }}'); // Replace with your search route 
+    xhr.open('POST', '{{ route('stock.searchStocksItems') }}'); // Replace with your search route
 
     // Set the CSRF token in the request header
     var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
-    xhr.onload = function() 
+    xhr.onload = function() {
       if (xhr.status === 200) {
         var response = JSON.parse(xhr.responseText);
         var item = response.item; // Assuming the server responds with the item data
