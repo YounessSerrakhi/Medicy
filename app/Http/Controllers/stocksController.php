@@ -24,6 +24,16 @@ class stocksController extends Controller
     
         return view("pages.stocks.stocks")->with(['stocks' => $stocks, 'outOfStocks' => $outOfStocks]);
     }
+
+    public function recentlyOut()
+    {
+        $outOfStocks = Stock::where('inStock', '=', '0')
+        ->whereRaw('DATEDIFF(CURDATE(), updated_at) <= 30')
+        ->get();
+    
+        return view("pages.stocks.recentlyOut")->with(['outOfStocks' => $outOfStocks]);
+    }
+    
     
 
     /**
@@ -53,6 +63,8 @@ class stocksController extends Controller
             $stock->name = $medicines->name;
             $stock->marketingStatus = $medicines->marketingStatus;
             $stock->approvalDate = $medicines->approvalDate;
+            $stock->price = $medicines->price;
+            $stock->barcode = $medicines->barcode;
         }
         else{
             $stock = stock::find($inDemand->idMedicine);
@@ -98,11 +110,12 @@ class stocksController extends Controller
      */
     public function outStock(Request $request, $id)
     {
+
         $stock = stock::find($id);
-    
         $validatedData = $request->validate([
             'quantity' => 'required|numeric|min:1|max:'.$stock->quantity,
         ]);
+
         if($stock->quantity == $request->quantity ){
             $stock->inStock=false;
             $stock->save();
@@ -115,21 +128,73 @@ class stocksController extends Controller
     }
 
 
+    public function deleteItems(Request $request){
+    $items = $request->json()->all();
+
+    foreach ($items as $item) {
+        $id = $item['id'];
+        $quantity = $item['quantity'];
+        $stock = stock::find($id);
+
+        if($stock->quantity == $quantity){
+            $stock->inStock=false;
+            $stock->save();
+        }
+    
+        $stock->quantity -= $quantity;
+        $stock->save();
+    }
+
+    return response()->json(['message' => 'Items deleted successfully']);
+}
+public function addItems(Request $request){
+    $items = $request->json()->all();
+
+    foreach ($items as $item) {
+        $id = $item['id'];
+        $quantity = $item['quantity'];
+        $inDemand=inDemand::where('idMedicine',$id)->orWhere('barcode',$id)->first();
+        $medicines = medicine::find($inDemand->idMedicine);
+        $inDemand->delete();
+        if(!stock::find($inDemand->idMedicine)){
+            $stock = new stock();
+            $stock->id = $inDemand->idMedicine;
+            $stock->quantity = $inDemand->quantity; 
+            $stock->form = $medicines->form;
+            $stock->name = $medicines->name;
+            $stock->marketingStatus = $medicines->marketingStatus;
+            $stock->approvalDate = $medicines->approvalDate;
+            $stock->price = $medicines->price;
+            $stock->barcode = $medicines->barcode;
+        }
+        else{
+            $stock = stock::find($inDemand->idMedicine);
+            $stock->inStock='1';
+            $stock->quantity += $inDemand->quantity; 
+        }
+        
+        
+        $stock->save();
+    }
+
+    return response()->json(['message' => 'Items added successfully']);
+}
 
 
-    public function searchItems(Request $request)
+
+
+    public function searchStocksItems(Request $request)
     {
-        // Retrieve the barcode from the request
         $barcode = $request->input('barcode');
         $quantity = $request->input('quantity');
 
-        // Perform the search operation or retrieve the item data based on the barcode
-        $stock = stock::find($barcode);
-        // Assuming we have an item to return
+
+        $medicine = stock::where('id',$barcode)->orWhere('barcode',$barcode)->first();
         $item = [
-            'number' => $stock->id,
-            'name' => $stock->name,
+            'number' => $medicine->id,
+            'name' => $medicine->name,
             'quantity' => $quantity,
+            'price' => $medicine->price,
         ];
 
         // Return the item as JSON response

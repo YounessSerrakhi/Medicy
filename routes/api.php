@@ -14,6 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+//all api routes that need to be athentified
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::post('/logout', [App\Http\Controllers\API\AuthApiController::class, 'logout']);
+    Route::post('/medicines/demande', [App\Http\Controllers\API\MedicineApiController::class, 'handleDemande'])->name('clientDemande');
 });
+
+
+
+Route::get('/medicines', [App\Http\Controllers\API\MedicineApiController::class, 'index'])->name('medicines_view');
+
+Route::post('/login',[App\Http\Controllers\API\AuthApiController::class, 'login']);
+Route::post('/register',[App\Http\Controllers\API\AuthApiController::class, 'register']);

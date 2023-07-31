@@ -10,6 +10,7 @@
             <th>Form</th>
             <th>Marketing Status</th>
             <th>Approval Date</th>
+            <th>prix</th> 
             <th>quantité</th>
           </tr>
         </thead>
@@ -23,6 +24,7 @@
             <td>{{$stock->form}}</td>
             <td>{{$stock->marketingStatus}}</td>
             <td>{{$stock->approvalDate}}</td>
+            <td>{{$stock->price}}MAD</td>
             <td>{{$stock->quantity}}</td>
             <td>
               <form method="GET" action="{{ route('stock.outStock', ['id' => $stock->id]) }}">
@@ -48,6 +50,7 @@
               <th>Form</th>
               <th>Marketing Status</th>
               <th>Approval Date</th>
+              <th>prix</th>
               <th>quantité</th>
             </tr>
           </thead>
@@ -61,6 +64,7 @@
             <td>{{$out->form}}</td>
             <td>{{$out->marketingStatus}}</td>
             <td>{{$out->approvalDate}}</td>
+            <td>{{$out->price}}MAD</td>
             <td>{{$out->quantity}}</td>
             <td>
               <form method="GET" action="{{ route('demand.create', ['id' => $out->id]) }}">
