@@ -19,7 +19,8 @@ Route::get('/', function () {
         return view('pages.welcome');
     }
 
-    return redirect()->route('medicines_view');
+    return redirect('http://localhost:3000');
+
 });
 
 
@@ -90,9 +91,9 @@ Route::get('/medicine/search', [App\Http\Controllers\medicinesController::class,
 
 
 //client_side
-Route::get('/medicines_view', [App\Http\Controllers\clientController::class,'index'])->name('medicines_view');
-Route::get('/medicines_view/demand', [App\Http\Controllers\clientController::class,'handleDemande'])->name('clientDemand');
+//Route::get('/medicines_view', [App\Http\Controllers\clientController::class,'index'])->name('medicines_view');
+//Route::get('/medicines_view/demand', [App\Http\Controllers\clientController::class,'handleDemande'])->name('clientDemand');
 
 
-Auth::routes();
+//Auth::routes();
 
